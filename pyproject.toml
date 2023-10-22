@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "gbnf-compiler"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simple plug and play GBNF compiler for llama.cpp"
 authors = ["NovaLand <87605316+nova-land@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/nova-land/gbnf-compiler"
 
 [tool.poetry.dependencies]
 python = ">=3.10"

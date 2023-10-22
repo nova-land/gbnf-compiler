@@ -1,5 +1,8 @@
 build:
-	python -m pip install -e .
+	python -m build
 
 test:
 	python -m pytest
+
+publish:
+	twine upload --skip-existing dist/*

@@ -4,7 +4,7 @@ SINGLE_LINE = 'singleline ::= [^\\n]+ "\\n"'
 SINGLE_SENTENCE = 'singlesentence ::= [^.] + "."'
 
 ITEM_RULE = 'item ::= "- " [^\\r\\n\\x0b\\x0c\\x85\\u2028\\u2029]+ "\\n"'
-ITEMLIST_RULE = 'itemlist ::= item+\\nitem ::= "- " [^\\r\\n\\x0b\\x0c\\x85\\u2028\\u2029]+ "\\n"'
+ITEMLIST_RULE = 'itemlist ::= item+\nitem ::= "- " [^\\r\\n\\x0b\\x0c\\x85\\u2028\\u2029]+ "\\n"'
 
 STRING_RULE = 'string ::= (^"\\] | "\\" (["\\/bfnrt] | "u" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F]))*'
 NUMBER_RULE = 'number ::= ("-"? ([0-9] | [1-9] [0-9]*)) ("." [0-9]+)? ([eE] [-+]? [0-9]+)?'
