@@ -1,6 +1,6 @@
 from typing import List, Dict
 from itertools import product
-from gbnf_compiler.rules import get_rule_name
+from gbnf_compiler.rules import Rule
 
 def get_all_occurrence_ends(sub: str, a_str: str):
     start = 0
@@ -30,7 +30,7 @@ def sort_by_longest_values(dictionaries: List[Dict]):
 class GBNFCompiler:
     """Create Grammar String from the template format and also parse the result into dict.
     """
-    def __init__(self, template: str, rules: Dict[str, str]):
+    def __init__(self, template: str, rules: Dict[str, Rule]):
         """Initialise the GBNF Compiler.
 
         Args:
@@ -52,7 +52,7 @@ class GBNFCompiler:
 
         for i in range(len(tokens)):
             if ((i+1) %2) == 0:
-                tokens[i] = f' {get_rule_name(self.rules[tokens[i]])} '
+                tokens[i] = f' {self.rules[tokens[i]].name()} '
             elif len(tokens[i]) > 0:
                 # Escape all string quotes
                 escaped = tokens[i].replace('"', '\\\"')
@@ -60,14 +60,14 @@ class GBNFCompiler:
         self.grammar_template = ''.join(tokens)
 
         # Gather Different Rules
-        rule_definitions = {}
+        rule_definitions: dict[str, str] = {}
         for rule in self.rules.values():
-            rule_name = get_rule_name(rule)
+            rule_name = rule.name()
             if rule_name not in rule_definitions:
-                rule_definitions[rule_name] = rule
+                rule_definitions[rule_name] = rule.rule
             # Verify all rules has the same definition
             else:
-                assert rule_definitions[rule_name] == rule
+                assert rule_definitions[rule_name] == rule.rule
         rule_definitions = '\n'.join(list(rule_definitions.values()))
         self.grammar_str = f'root ::= Template\nTemplate ::= {self.grammar_template}\n{rule_definitions}'
 
@@ -130,4 +130,9 @@ class GBNFCompiler:
             to_return.append(matched_placeholders)
 
         # Get the one with longest values
-        return sort_by_longest_values(to_return)
+        result = sort_by_longest_values(to_return)
+
+        # Compile the result for each rule
+        for (key, value) in result.items():
+            result[key] = self.rules[key].compile(value)
+        return result

@@ -1,11 +1,11 @@
-from gbnf_compiler.sentence import GBNFCompiler
+from gbnf_compiler.compiler import GBNFCompiler
 from gbnf_compiler.rules import *
 
 def test_simple_grammar():
 
     template = "Here is a {{thing}} for you: {{smiley}}"
     text = "Here is a smiley for you: :-)"
-    c = GBNFCompiler(template, { 'thing': SINGLE_LINE, 'smiley': SINGLE_LINE })
+    c = GBNFCompiler(template, { 'thing': SingleLine(), 'smiley': SingleLine() })
     result = c.parse(text)
 
     assert result['thing'] == 'smiley'
@@ -14,7 +14,7 @@ def test_simple_grammar():
 def test_simple_json():
     import json
     template = json.dumps({ 'objective': "{{objective}}", 'first_goal': "{{first_goal}}", 'second_goal': "{{second_goal}}" })
-    c = GBNFCompiler(template, { 'objective': SINGLE_SENTENCE, 'first_goal': SINGLE_SENTENCE, 'second_goal': SINGLE_SENTENCE })
+    c = GBNFCompiler(template, { 'objective': SingleSentence(), 'first_goal': SingleSentence(), 'second_goal': SingleSentence() })
 
     expect_grammar = r'''root ::= Template
 Template ::= "{\"objective\": \"" singlesentence "\", \"first_goal\": \"" singlesentence "\", \"second_goal\": \"" singlesentence "\"}"
@@ -34,9 +34,9 @@ singlesentence ::= [^.] + "."'''
 def test_multiple_choice():
     template = "I choose {{tool}} because {{reason}}"
     text = "I choose calculator because I need to calculate the result of 2^5."
-    tools = multiple_choice('tool', ['calculator', 'web-search', 'web-browse'])
+    tools = MultipleChoice('tool', ['calculator', 'web-search', 'web-browse'])
 
-    c = GBNFCompiler(template, { 'tool': tools, 'reason': SINGLE_SENTENCE })
+    c = GBNFCompiler(template, { 'tool': tools, 'reason': SingleSentence() })
 
     expect_grammar = r'''root ::= Template
 Template ::= "I choose " tool " because " singlesentence 

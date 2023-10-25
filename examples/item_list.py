@@ -6,23 +6,27 @@ import requests
 from gbnf_compiler.compiler import GBNFCompiler
 from gbnf_compiler.rules import *
 
-prompt = "What tool will you use for calculate 2^5 ?"
-template = "I choose {{tool}} because {{reason}}"
-text = "I choose calculator because I need to calculate the result of 2^5."
-tools = MultipleChoice('tool', ['calculator', 'web-search', 'web-browse'])
-c = GBNFCompiler(template, { 'tool': tools, 'reason': SingleSentence() })
+prompt = "Give me 3 objectives as a market researcher."
+template = "Objectives: \n {{objectives}}"
+c = GBNFCompiler(template, { 'objectives': ItemList() })
 print(c.grammar())
 
+text = r'''Objectives: 
+ - To understand the market and its trends.
+- To identify the target audience.
+- To find out the competitors.'''
 result = c.parse(text)
 print(result)
 
-
 """
-# Bad Example of generating wrong answer without reasoning
-
-prompt = "What is the answer of calculating 2 + 5 ?"
-template = "{{answer}}"
-c = GBNFCompiler(template, { 'answer': NUMBER_RULE })
+Result:
+{
+  'objectives': [
+    'To understand the market and its trends.',
+    'To identify the target audience.',
+    'To find out the competitors.'
+  ]
+}
 """
 
 def template(role: str, prompt: str):
