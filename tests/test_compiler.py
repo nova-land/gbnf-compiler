@@ -48,3 +48,22 @@ singlesentence ::= [^.] + "."'''
     result = c.parse(text)
     expect_result = {'tool': 'calculator', 'reason': 'I need to calculate the result of 2^5.'}
     assert result == expect_result
+
+def test_item_list():
+    template = "Objectives: {{objectives}}"
+    text = r'''Objectives: - Objective 1
+- Objective 2
+- Objective 3
+- Objective 4'''
+
+    c = GBNFCompiler(template, { 'objectives': ItemList() })
+    expect_grammar = r'''root ::= Template
+Template ::= "Objectives: " itemlist 
+itemlist ::= item+
+item ::= "- " [^\r\n\x0b\x0c\x85\u2028\u2029]+ "\n"'''
+
+    assert c.grammar() == expect_grammar
+
+    result = c.parse(text)
+    expect_result = {'objectives': ['Objective 1', 'Objective 2', 'Objective 3', 'Objective 4']}
+    assert result == expect_result
