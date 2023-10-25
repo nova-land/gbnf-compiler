@@ -50,15 +50,17 @@ singlesentence ::= [^.] + "."'''
     assert result == expect_result
 
 def test_item_list():
-    template = "Objectives: {{objectives}}"
-    text = r'''Objectives: - Objective 1
+    template = "Objectives: \n{{objectives}}"
+    text = r'''Objectives: 
+- Objective 1
 - Objective 2
 - Objective 3
 - Objective 4'''
 
     c = GBNFCompiler(template, { 'objectives': ItemList() })
     expect_grammar = r'''root ::= Template
-Template ::= "Objectives: " itemlist 
+Template ::= "Objectives: 
+" itemlist 
 itemlist ::= item+
 item ::= "- " [^\r\n\x0b\x0c\x85\u2028\u2029]+ "\n"'''
 

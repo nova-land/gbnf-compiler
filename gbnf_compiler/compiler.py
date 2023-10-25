@@ -131,6 +131,7 @@ class GBNFCompiler:
 
         # Get the one with longest values
         result = sort_by_longest_values(to_return)
+        if result is None: return None
 
         # Compile the result for each rule
         for (key, value) in result.items():
