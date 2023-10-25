@@ -75,5 +75,7 @@ print(c.parse(result))
 ### Useful Rule Examples
 
 1. [`ItemList`](./examples/item_list.py): The Result will automatically compiled into a list of string.
+    - Drawback: The LLM might keep generating more items until max tokens.
 
 2. [`Point Form`](./examples/point_form.py): Create a Point Form Result with specific numbers.
+    - This can restrict the LLM to provide limited items.
