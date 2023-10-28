@@ -1,4 +1,5 @@
-from typing import List, Self, Union
+from __future__ import annotations
+from typing import List, Union
 import json
 
 class Rule:
@@ -7,7 +8,7 @@ class Rule:
     """
 
     rule: str
-    dependent_rules: List[Self] = []
+    dependent_rules: List[Rule] = []
 
     def name(self):
         return self.rule.split('::=')[0].strip()
