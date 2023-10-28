@@ -1,6 +1,6 @@
 from typing import List, Dict
 from itertools import product
-from gbnf_compiler.rules import BasicRule
+from gbnf_compiler.rules import Rule
 
 def get_all_occurrence_ends(sub: str, a_str: str):
     start = 0
@@ -16,6 +16,12 @@ def is_ascending_sequence(seq: List[int]):
         if seq[i] <= seq[i-1]: return False
     return True
 
+def flatten_recursive(obj: Rule) -> List[Rule]:
+    result = [obj]  # Initialize the result list with the current object
+    for item in obj.dependent_rules:
+        result.extend(flatten_recursive(item))  # Recursively flatten x
+    return result
+
 def get_values_lengths(dictionary: Dict):
     # Calculate the sum of the lengths of values in the dictionary
     return sum(map(lambda value: len(value), dictionary.values()))
@@ -30,7 +36,7 @@ def sort_by_longest_values(dictionaries: List[Dict]):
 class GBNFCompiler:
     """Create Grammar String from the template format and also parse the result into dict.
     """
-    def __init__(self, template: str, rules: Dict[str, BasicRule]):
+    def __init__(self, template: str, rules: Dict[str, Rule]):
         """Initialise the GBNF Compiler.
 
         Args:
@@ -62,14 +68,14 @@ class GBNFCompiler:
         # Gather Different Rules
         rule_definitions: dict[str, str] = {}
         for rule in self.rules.values():
-            included_rules = [rule]
-            if len(rule.dependent_rules) > 0: included_rules.extend(rule.dependent_rules)
+            included_rules = set(flatten_recursive(rule))
             for included_rule in included_rules:
                 if included_rule.name() not in rule_definitions:
                     rule_definitions[included_rule.name()] = included_rule.rule
                 # Verify all rules has the same definition
                 else:
                     assert rule_definitions[included_rule.name()] == included_rule.rule
+        
         rule_definitions = '\n'.join(list(rule_definitions.values()))
         self.grammar_str = f'root ::= Template\nTemplate ::= {self.grammar_template}\n{rule_definitions}'
 
