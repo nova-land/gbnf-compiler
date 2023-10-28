@@ -64,6 +64,7 @@ Template ::= "Objectives:
 itemlist ::= item+
 item ::= "- " [^\r\n\x0b\x0c\x85\u2028\u2029]+ "\n"'''
 
+    print(c.grammar())
     assert c.grammar() == expect_grammar
 
     result = c.parse(text)

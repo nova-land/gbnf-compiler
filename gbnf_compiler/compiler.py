@@ -1,6 +1,6 @@
 from typing import List, Dict
 from itertools import product
-from gbnf_compiler.rules import Rule
+from gbnf_compiler.rules import BasicRule
 
 def get_all_occurrence_ends(sub: str, a_str: str):
     start = 0
@@ -30,7 +30,7 @@ def sort_by_longest_values(dictionaries: List[Dict]):
 class GBNFCompiler:
     """Create Grammar String from the template format and also parse the result into dict.
     """
-    def __init__(self, template: str, rules: Dict[str, Rule]):
+    def __init__(self, template: str, rules: Dict[str, BasicRule]):
         """Initialise the GBNF Compiler.
 
         Args:
@@ -62,12 +62,14 @@ class GBNFCompiler:
         # Gather Different Rules
         rule_definitions: dict[str, str] = {}
         for rule in self.rules.values():
-            rule_name = rule.name()
-            if rule_name not in rule_definitions:
-                rule_definitions[rule_name] = rule.rule
-            # Verify all rules has the same definition
-            else:
-                assert rule_definitions[rule_name] == rule.rule
+            included_rules = [rule]
+            if len(rule.dependent_rules) > 0: included_rules.extend(rule.dependent_rules)
+            for included_rule in included_rules:
+                if included_rule.name() not in rule_definitions:
+                    rule_definitions[included_rule.name()] = included_rule.rule
+                # Verify all rules has the same definition
+                else:
+                    assert rule_definitions[included_rule.name()] == included_rule.rule
         rule_definitions = '\n'.join(list(rule_definitions.values()))
         self.grammar_str = f'root ::= Template\nTemplate ::= {self.grammar_template}\n{rule_definitions}'
 
