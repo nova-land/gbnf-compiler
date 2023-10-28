@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gbnf-compiler"
-version = "0.2.3"
+version = "0.3.0"
 description = "Simple plug and play GBNF compiler for llama.cpp"
 authors = ["NovaLand <87605316+nova-land@users.noreply.github.com>"]
 license = "MIT"
