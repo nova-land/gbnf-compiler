@@ -3,8 +3,7 @@ Example request with llama.cpp
 '''
 
 import requests
-from gbnf_compiler.compiler import GBNFCompiler
-from gbnf_compiler.rules import *
+from gbnf_compiler import GBNFCompiler, MultipleChoice, SingleSentence
 
 prompt = "What tool will you use for calculate 2^5 ?"
 template = "I choose {{tool}} because {{reason}}"

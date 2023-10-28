@@ -22,8 +22,7 @@ In most of the time, using sentence-based GBNF can produce better result than JS
 
 ```python
 import requests
-from gbnf_compiler.sentence import GBNFCompiler
-from gbnf_compiler.rules import *
+from gbnf_compiler import *
 
 # Define your Prompt
 prompt = "What tool will you use to calculate 2^5 ?"

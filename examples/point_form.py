@@ -1,6 +1,5 @@
 import requests
-from gbnf_compiler.compiler import GBNFCompiler
-from gbnf_compiler.rules import *
+from gbnf_compiler import *
 
 
 template = "I might need the following supplementary information:\n1. {{d1}}2. {{d2}}3. {{d3}}4. {{d4}}5. {{d5}}"

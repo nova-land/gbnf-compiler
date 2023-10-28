@@ -3,8 +3,7 @@ Example request with llama.cpp
 '''
 
 import requests
-from gbnf_compiler.compiler import GBNFCompiler
-from gbnf_compiler.rules import *
+from gbnf_compiler import *
 
 prompt = "Give me 3 objectives as a market researcher."
 template = "Objectives: \n {{objectives}}"
