@@ -32,11 +32,7 @@ prompt = "What tool will you use to calculate 2^5 ?"
 # Each {{}} is a variable with a rule
 template = "I choose {{tool}} because {{reason}}"
 
-# Define the Rule - "tools" for variable ("tool")
 tools = MultipleChoice('tool', ['calculator', 'web-search', 'web-browse'])
-
-# Create the GBNF Compiler
-# Single Sentence is a default Grammar Rule which ends with '.'
 c = GBNFCompiler(template, { 'tool': tools, 'reason': SingleSentence() })
 print(c.grammar())
 
