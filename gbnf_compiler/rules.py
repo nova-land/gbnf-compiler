@@ -22,6 +22,8 @@ class SingleSentence(Rule):
 
 class NumberRule(Rule):
     rule = 'number ::= ("-"? ([0-9] | [1-9] [0-9]*)) ("." [0-9]+)? ([eE] [-+]? [0-9]+)?'
+    def compile(self, result: str) -> float:
+        return float(result)
 
 class StringRule(Rule):
     rule = 'string ::= \"\\"\" ([^"]*) \"\\"\"'
